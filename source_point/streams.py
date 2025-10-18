@@ -28,8 +28,9 @@ class PointStream(HttpStream):
 
     def __init__(self, config: Mapping[str, Any], **kwargs):
         super().__init__(**kwargs)
-        self.config = config
-        self.logger = logging.getLogger(self.__class__.__name__)
+        self.api_key = config["api_key"]
+        self.organization_id = config["organization_id"]
+        self.distribution_type_id = config.get("distribution_type_id", "1")
 
     @property
     def name(self) -> str:
@@ -57,7 +58,7 @@ class PointStream(HttpStream):
         Return headers for the API request.
         """
         return {
-            "APIkey": self.config["api_key"],
+            "APIkey": self.api_key,
             "Accept": "application/json",
             "User-Agent": "Airbyte Point Connector/1.0"
         }
@@ -72,10 +73,19 @@ class PointStream(HttpStream):
         Return query parameters for the API request.
         """
         return {
-            "OrganizationID": self.config["organization_id"],
-            "DistributionTypeID": self.config.get("distribution_type_id", "1")
+            "OrganizationID": self.organization_id,
+            "DistributionTypeID": self.distribution_type_id
             # Removed APIkey from query params - using header only for better security
         }
+
+    def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
+        """
+        Return the next page token for pagination.
+        
+        Since the Point API returns all data in a single response,
+        there is no pagination, so we always return None.
+        """
+        return None
 
     def parse_response(
         self,
@@ -104,7 +114,7 @@ class PointStream(HttpStream):
             
             # Decode base64 data
             if "Data" not in json_response:
-                self.logger.error(f"No 'Data' field found in API response. Available fields: {list(json_response.keys()) if isinstance(json_response, dict) else type(json_response)}")
+                logging.error(f"No 'Data' field found in API response. Available fields: {list(json_response.keys()) if isinstance(json_response, dict) else type(json_response)}")
                 return
                 
             try:
@@ -118,17 +128,17 @@ class PointStream(HttpStream):
                 for encoding in encodings:
                     try:
                         csv_data = csv_bytes.decode(encoding)
-                        self.logger.info(f"Successfully decoded base64 data using {encoding}, length: {len(csv_data)}")
+                        logging.info(f"Successfully decoded base64 data using {encoding}, length: {len(csv_data)}")
                         break
                     except UnicodeDecodeError:
                         continue
                 
                 if csv_data is None:
-                    self.logger.error("Could not decode CSV data with any supported encoding")
+                    logging.error("Could not decode CSV data with any supported encoding")
                     return
                     
             except Exception as e:
-                self.logger.error(f"Failed to decode base64 data: {str(e)}")
+                logging.error(f"Failed to decode base64 data: {str(e)}")
                 return
             
             # Parse CSV data
@@ -158,7 +168,7 @@ class PointStream(HttpStream):
                 yield record
                 
         except Exception as e:
-            self.logger.error(f"Error parsing response: {str(e)}")
+            logging.error(f"Error parsing response: {str(e)}")
             raise
 
     def get_json_schema(self) -> Mapping[str, Any]:
@@ -237,9 +247,9 @@ class PointStream(HttpStream):
                 if "Data" in json_response:
                     return True
                     
-            self.logger.error(f"API test failed with status {response.status_code}: {response.text}")
+            logging.error(f"API test failed with status {response.status_code}: {response.text}")
             return False
             
         except Exception as e:
-            self.logger.error(f"Connection test failed: {str(e)}")
+            logging.error(f"Connection test failed: {str(e)}")
             return False

@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "source-point"
+version = "0.1.0"
+description = "Source implementation for Point API"
+authors = ["Airbyte <contact@airbyte.io>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "source_point"}]
+
+[tool.poetry.dependencies]
+python = "^3.9,<3.13"
+airbyte-cdk = "^1.0.0"
+requests = "^2.31.0"
+pydantic = "^1.10.0"
+jsonschema = "^3.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+pytest-mock = "^3.10.0"
+requests-mock = "^1.10.0"
+
+[tool.poetry.scripts]
+source-point = "source_point.run:run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.airbyte_cdk]
+# This section is used by the Airbyte CDK

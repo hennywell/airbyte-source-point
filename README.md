@@ -157,4 +157,4 @@ The API returns a JSON response containing base64-encoded CSV data which is deco
 - Only supports full refresh sync mode
 - CSV data must be semicolon-delimited
 - No incremental sync support (API returns latest data only)
-- Memory usage scales with CSV file size
+- Memory usage scales with CSV file size# Updated Sat Oct 18 19:28:13 CEST 2025

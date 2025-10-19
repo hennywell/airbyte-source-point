@@ -12,5 +12,5 @@ ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/source_point/run.py"
 ENTRYPOINT ["python", "/airbyte/integration_code/source_point/run.py"]
 
 # Labels for metadata
-LABEL io.airbyte.version=0.1.0
-LABEL io.airbyte.name=airbyte/source-point
+LABEL io.airbyte.version=0.1.4
+LABEL io.airbyte.name=ghcr.io/hennywell/airbyte-source-point

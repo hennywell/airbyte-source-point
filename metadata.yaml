@@ -2,8 +2,8 @@ data:
   connectorSubtype: api
   connectorType: source
   definitionId: 12345678-1234-1234-1234-123456789abc
-  dockerImageTag: 0.1.1
-  dockerRepository: ludohenny/source-point
+  dockerImageTag: 0.1.4
+  dockerRepository: ghcr.io/hennywell/airbyte-source-point
   githubIssueLabel: source-point
   name: PointApi
   registries:

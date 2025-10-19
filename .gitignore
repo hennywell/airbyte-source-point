@@ -4,3 +4,4 @@
 secrets/
 .venv
 venv/
+.DS_Store

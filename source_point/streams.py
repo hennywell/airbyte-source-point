@@ -23,8 +23,8 @@ class PointStream(HttpStream):
     """
 
     url_base = "https://webservices.verzorgdeoverdracht.nl/api/DistributableData/"
-    primary_key = "identifier"  # Use identifier as primary key
-    cursor_field = "timestamp"  # Use timestamp as cursor field
+    primary_key = "metainfo_identifier"  # Use metainfo_identifier as primary key
+    cursor_field = "metainfo_timestamp"  # Use metainfo_timestamp as cursor field
     http_method = "GET"
 
     def __init__(self, config: Mapping[str, Any], **kwargs):
@@ -142,11 +142,9 @@ class PointStream(HttpStream):
             
             # Extract metadata from the response (direct structure, no 'body' wrapper)
             metadata = {
-                "identifier": json_response.get("Identifier"),
-                "file_name": json_response.get("FileName"),
-                "content_type": json_response.get("ContentType"),
-                "timestamp": json_response.get("Timestamp"),
-                "api_status": response.status_code
+                "metainfo_identifier": json_response.get("Identifier"),
+                "metainfo_file_name": json_response.get("FileName"),
+                "metainfo_timestamp": json_response.get("Timestamp")
             }
             
             # Decode base64 data
@@ -189,22 +187,26 @@ class PointStream(HttpStream):
             
             csv_reader = csv.DictReader(io.StringIO(csv_content), delimiter=';')
             
+            # Load schema to identify field types for proper data conversion
+            schema = self.get_json_schema()
+            schema_properties = schema.get("properties", {})
+            
             for row_index, row in enumerate(csv_reader):
-                # Clean up the row data - remove empty keys and null values
+                # Clean up the row data with proper type conversion
                 cleaned_row = {}
                 for key, value in row.items():
-                    if key and key.strip() and value is not None:
-                        cleaned_row[key.strip()] = value.strip() if isinstance(value, str) else value
+                    if key and key.strip():
+                        clean_key = key.strip()
+                        cleaned_value = self._convert_field_value(clean_key, value, schema_properties)
+                        if cleaned_value is not None:  # Only include non-null values
+                            cleaned_row[clean_key] = cleaned_value
                 
                 # Create flattened record with metadata and CSV data at top level
                 record = {
                     # Metadata fields at top level
-                    "identifier": metadata["identifier"],
-                    "timestamp": metadata["timestamp"],
-                    "file_name": metadata["file_name"],
-                    "content_type": metadata["content_type"],
-                    "api_status": metadata["api_status"],
-                    "row_index": row_index,
+                    "metainfo_identifier": metadata["metainfo_identifier"],
+                    "metainfo_timestamp": metadata["metainfo_timestamp"],
+                    "metainfo_file_name": metadata["metainfo_file_name"]
                 }
                 
                 # Add all CSV columns at top level
@@ -239,30 +241,18 @@ class PointStream(HttpStream):
                 "$schema": "http://json-schema.org/draft-07/schema#",
                 "type": "object",
                 "properties": {
-                    "identifier": {
+                    "metainfo_identifier": {
                         "type": ["string", "null"],
                         "description": "Unique identifier from the API response (Primary Key)"
                     },
-                    "timestamp": {
+                    "metainfo_timestamp": {
                         "type": ["string", "null"],
                         "format": "date-time",
                         "description": "Timestamp when the data was generated (Cursor Field)"
                     },
-                    "file_name": {
+                    "metainfo_file_name": {
                         "type": ["string", "null"],
                         "description": "Name of the CSV file"
-                    },
-                    "content_type": {
-                        "type": ["string", "null"],
-                        "description": "Content type of the data"
-                    },
-                    "api_status": {
-                        "type": ["integer", "null"],
-                        "description": "HTTP status code from the API"
-                    },
-                    "row_index": {
-                        "type": "integer",
-                        "description": "Index of the row in the CSV data"
                     }
                 },
                 "additionalProperties": {
@@ -324,30 +314,18 @@ class PointStream(HttpStream):
             # Build schema with discovered columns
             properties = {
                 # Metadata fields
-                "identifier": {
+                "metainfo_identifier": {
                     "type": ["string", "null"],
                     "description": "Unique identifier from the API response (Primary Key)"
                 },
-                "timestamp": {
+                "metainfo_timestamp": {
                     "type": ["string", "null"],
                     "format": "date-time",
                     "description": "Timestamp when the data was generated (Cursor Field)"
                 },
-                "file_name": {
+                "metainfo_file_name": {
                     "type": ["string", "null"],
                     "description": "Name of the CSV file"
-                },
-                "content_type": {
-                    "type": ["string", "null"],
-                    "description": "Content type of the data"
-                },
-                "api_status": {
-                    "type": ["integer", "null"],
-                    "description": "HTTP status code from the API"
-                },
-                "row_index": {
-                    "type": "integer",
-                    "description": "Index of the row in the CSV data"
                 }
             }
             
@@ -401,6 +379,96 @@ class PointStream(HttpStream):
         
         # Default to string
         return ["string", "null"]
+
+    def _convert_field_value(self, field_name: str, value: Any, schema_properties: Mapping[str, Any]) -> Any:
+        """
+        Convert field value based on schema type definition.
+        
+        Args:
+            field_name: Name of the field
+            value: Raw value from CSV
+            schema_properties: Schema properties for type checking
+            
+        Returns:
+            Converted value or None for empty values that should be null
+        """
+        # Handle None or empty values
+        if value is None:
+            return None
+            
+        # Convert to string and strip whitespace
+        if isinstance(value, str):
+            value = value.strip()
+        else:
+            value = str(value).strip()
+        
+        # Handle empty strings
+        if value == "":
+            return None
+            
+        # Get field schema definition
+        field_schema = schema_properties.get(field_name, {})
+        field_types = field_schema.get("type", ["string", "null"])
+        
+        # Ensure field_types is a list
+        if isinstance(field_types, str):
+            field_types = [field_types]
+            
+        # If field can be integer, try to convert
+        if "integer" in field_types:
+            try:
+                # Try to convert to integer
+                return int(value)
+            except (ValueError, TypeError):
+                # If conversion fails and null is allowed, return None
+                if "null" in field_types:
+                    logging.warning(f"Could not convert '{value}' to integer for field '{field_name}', setting to null")
+                    return None
+                else:
+                    # If null not allowed, keep as string
+                    logging.warning(f"Could not convert '{value}' to integer for field '{field_name}', keeping as string")
+                    return value
+        
+        # If field can be number (float), try to convert
+        elif "number" in field_types:
+            try:
+                # Try to convert to float
+                return float(value)
+            except (ValueError, TypeError):
+                # If conversion fails and null is allowed, return None
+                if "null" in field_types:
+                    logging.warning(f"Could not convert '{value}' to number for field '{field_name}', setting to null")
+                    return None
+                else:
+                    # If null not allowed, keep as string
+                    logging.warning(f"Could not convert '{value}' to number for field '{field_name}', keeping as string")
+                    return value
+        
+        # If field can be boolean, try to convert
+        elif "boolean" in field_types:
+            try:
+                # Convert common boolean representations
+                lower_value = value.lower()
+                if lower_value in ["true", "yes", "1", "on", "enabled"]:
+                    return True
+                elif lower_value in ["false", "no", "0", "off", "disabled"]:
+                    return False
+                else:
+                    # If conversion fails and null is allowed, return None
+                    if "null" in field_types:
+                        logging.warning(f"Could not convert '{value}' to boolean for field '{field_name}', setting to null")
+                        return None
+                    else:
+                        # If null not allowed, keep as string
+                        return value
+            except (ValueError, TypeError):
+                if "null" in field_types:
+                    return None
+                else:
+                    return value
+        
+        # For string fields or any other type, return the cleaned string value
+        return value
 
     def test_connection(self) -> bool:
         """

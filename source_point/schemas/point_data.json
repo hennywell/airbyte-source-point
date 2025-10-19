@@ -2,14 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "identifier": {
+    "metainfo_identifier": {
       "type": [
         "string",
         "null"
       ],
       "description": "Unique identifier from the API response (Primary Key)"
     },
-    "timestamp": {
+    "metainfo_timestamp": {
       "type": [
         "string",
         "null"
@@ -17,30 +17,12 @@
       "format": "date-time",
       "description": "Timestamp when the data was generated (Cursor Field)"
     },
-    "file_name": {
+    "metainfo_file_name": {
       "type": [
         "string",
         "null"
       ],
       "description": "Name of the CSV file"
-    },
-    "content_type": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "description": "Content type of the data"
-    },
-    "api_status": {
-      "type": [
-        "integer",
-        "null"
-      ],
-      "description": "HTTP status code from the API"
-    },
-    "row_index": {
-      "type": "integer",
-      "description": "Index of the row in the CSV data"
     },
     "TransferID": {
       "type": [

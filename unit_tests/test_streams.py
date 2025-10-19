@@ -45,7 +45,8 @@ class TestPointStream:
         
         assert params["OrganizationID"] == "test_org_id"
         assert params["DistributionTypeID"] == "1"
-        assert params["APIkey"] == "test_api_key"
+        # APIkey is now in headers only, not in params
+        assert "APIkey" not in params
 
     def test_request_params_default_distribution_type(self):
         """Test default distribution type ID."""
@@ -67,8 +68,13 @@ class TestPointStream:
         
         properties = schema["properties"]
         assert "row_index" in properties
-        assert "metadata" in properties
-        assert "data" in properties
+        assert "identifier" in properties  # Flattened metadata
+        assert "timestamp" in properties   # Flattened metadata
+        assert "file_name" in properties   # Flattened metadata
+        assert "additionalProperties" in schema  # For dynamic CSV columns
+        # metadata and data should not be nested anymore
+        assert "metadata" not in properties
+        assert "data" not in properties
 
     def test_parse_response_success(self):
         """Test successful response parsing."""
@@ -76,19 +82,17 @@ class TestPointStream:
         csv_data = "column1;column2;column3\nvalue1;value2;value3\nvalue4;value5;value6"
         encoded_data = base64.b64encode(csv_data.encode('utf-8')).decode('utf-8')
         
-        # Mock API response
+        # Mock API response - updated to match actual API structure
         mock_response_data = {
-            "status": 200,
-            "body": {
-                "Identifier": "test-id-123",
-                "FileName": "test.csv",
-                "ContentType": "text/csv",
-                "Timestamp": "2023-01-01T12:00:00Z",
-                "Data": encoded_data
-            }
+            "Identifier": "test-id-123",
+            "FileName": "test.csv",
+            "ContentType": "text/csv",
+            "Timestamp": "2023-01-01T12:00:00Z",
+            "Data": encoded_data
         }
         
         mock_response = Mock()
+        mock_response.status_code = 200
         mock_response.json.return_value = mock_response_data
         
         # Parse response
@@ -97,25 +101,26 @@ class TestPointStream:
         # Verify results
         assert len(records) == 2  # Two data rows
         
-        # Check first record
+        # Check first record - flattened structure
         first_record = records[0]
         assert first_record["row_index"] == 0
-        assert first_record["metadata"]["identifier"] == "test-id-123"
-        assert first_record["metadata"]["file_name"] == "test.csv"
-        assert first_record["data"]["column1"] == "value1"
-        assert first_record["data"]["column2"] == "value2"
-        assert first_record["data"]["column3"] == "value3"
+        assert first_record["identifier"] == "test-id-123"  # Flattened
+        assert first_record["file_name"] == "test.csv"     # Flattened
+        assert first_record["column1"] == "value1"         # CSV data flattened
+        assert first_record["column2"] == "value2"         # CSV data flattened
+        assert first_record["column3"] == "value3"         # CSV data flattened
         
         # Check second record
         second_record = records[1]
         assert second_record["row_index"] == 1
-        assert second_record["data"]["column1"] == "value4"
+        assert second_record["column1"] == "value4"        # CSV data flattened
 
     def test_parse_response_missing_body(self):
         """Test response parsing with missing body."""
-        mock_response_data = {"status": 200}
+        mock_response_data = {}  # Empty response
         
         mock_response = Mock()
+        mock_response.status_code = 200
         mock_response.json.return_value = mock_response_data
         
         records = list(self.stream.parse_response(mock_response))
@@ -124,15 +129,13 @@ class TestPointStream:
     def test_parse_response_missing_data(self):
         """Test response parsing with missing Data field."""
         mock_response_data = {
-            "status": 200,
-            "body": {
-                "Identifier": "test-id-123",
-                "FileName": "test.csv"
-                # Missing "Data" field
-            }
+            "Identifier": "test-id-123",
+            "FileName": "test.csv"
+            # Missing "Data" field
         }
         
         mock_response = Mock()
+        mock_response.status_code = 200
         mock_response.json.return_value = mock_response_data
         
         records = list(self.stream.parse_response(mock_response))
@@ -141,17 +144,15 @@ class TestPointStream:
     def test_parse_response_invalid_base64(self):
         """Test response parsing with invalid base64 data."""
         mock_response_data = {
-            "status": 200,
-            "body": {
-                "Identifier": "test-id-123",
-                "FileName": "test.csv",
-                "ContentType": "text/csv",
-                "Timestamp": "2023-01-01T12:00:00Z",
-                "Data": "invalid_base64_data!!!"
-            }
+            "Identifier": "test-id-123",
+            "FileName": "test.csv",
+            "ContentType": "text/csv",
+            "Timestamp": "2023-01-01T12:00:00Z",
+            "Data": "invalid_base64_data!!!"
         }
         
         mock_response = Mock()
+        mock_response.status_code = 200
         mock_response.json.return_value = mock_response_data
         
         records = list(self.stream.parse_response(mock_response))
@@ -165,12 +166,9 @@ class TestPointStream:
         encoded_data = base64.b64encode(csv_data.encode('utf-8')).decode('utf-8')
         
         mock_response_data = {
-            "status": 200,
-            "body": {
-                "Identifier": "test-id",
-                "FileName": "test.csv",
-                "Data": encoded_data
-            }
+            "Identifier": "test-id",
+            "FileName": "test.csv",
+            "Data": encoded_data
         }
         
         mock_response = Mock()

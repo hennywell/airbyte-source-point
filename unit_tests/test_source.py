@@ -13,7 +13,8 @@ class TestSourcePoint:
     def test_spec(self):
         """Test that spec returns the correct specification."""
         source = SourcePoint()
-        spec = source.spec()
+        logger = Mock()
+        spec = source.spec(logger)
         
         assert spec.connectionSpecification is not None
         assert "properties" in spec.connectionSpecification

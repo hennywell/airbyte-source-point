@@ -2,3 +2,5 @@
 .kilocode/
 .env
 secrets/
+.venv
+venv/

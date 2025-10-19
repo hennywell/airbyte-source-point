@@ -70,17 +70,18 @@ class TestIntegration:
         # Verify we got some records
         assert len(records) > 0, "No records were returned from the API"
         
-        # Verify record structure
+        # Verify record structure - flattened schema
         first_record = records[0]
         assert "row_index" in first_record
-        assert "metadata" in first_record
-        assert "data" in first_record
+        assert "identifier" in first_record  # Primary key at top level
+        assert "timestamp" in first_record   # Cursor field at top level
+        assert "file_name" in first_record   # Metadata at top level
+        assert "content_type" in first_record
+        assert "api_status" in first_record
         
-        # Verify metadata structure
-        metadata = first_record["metadata"]
-        assert "identifier" in metadata
-        assert "file_name" in metadata
-        assert "timestamp" in metadata
+        # Verify that metadata and data are no longer nested objects
+        assert "metadata" not in first_record  # Should not be nested anymore
+        assert "data" not in first_record      # Should not be nested anymore
         
-        # Verify data is a dictionary
-        assert isinstance(first_record["data"], dict)
+        # Verify identifier is not None (primary key)
+        assert first_record["identifier"] is not None

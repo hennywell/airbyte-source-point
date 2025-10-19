@@ -5,7 +5,7 @@ data:
   dockerImageTag: 0.1.1
   dockerRepository: ludohenny/source-point
   githubIssueLabel: source-point
-  name: Point
+  name: PointApi
   registries:
     cloud:
       enabled: false

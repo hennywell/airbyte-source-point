@@ -59,19 +59,30 @@ def test_base64_csv_parsing():
         
         records = []
         for row_index, row in enumerate(csv_reader):
+            # Create flattened record with metadata and CSV data at top level
             record = {
+                # Metadata fields at top level
+                "identifier": metadata["identifier"],
+                "timestamp": metadata["timestamp"],
+                "file_name": metadata["file_name"],
+                "content_type": metadata["content_type"],
+                "api_status": metadata["api_status"],
                 "row_index": row_index,
-                "metadata": metadata,
-                "data": row
             }
+            
+            # Add all CSV columns at top level
+            record.update(row)
+            
             records.append(record)
         
         print(f"Parsed records:\n{json.dumps(records, indent=2)}\n")
         
         # Validate results
         assert len(records) == 2, f"Expected 2 records, got {len(records)}"
-        assert records[0]["data"]["column1"] == "value1"
-        assert records[1]["data"]["column1"] == "value4"
+        assert records[0]["column1"] == "value1"  # CSV data now at top level
+        assert records[1]["column1"] == "value4"  # CSV data now at top level
+        assert records[0]["identifier"] == "test-id-123"  # Metadata at top level
+        assert records[0]["timestamp"] == "2023-01-01T12:00:00Z"  # Metadata at top level
         
         print("✅ All tests passed! Core functionality is working correctly.")
         return True
@@ -135,43 +146,35 @@ def test_json_schema():
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "properties": {
+            "identifier": {
+                "type": ["string", "null"],
+                "description": "Unique identifier from the API response (Primary Key)"
+            },
+            "timestamp": {
+                "type": ["string", "null"],
+                "format": "date-time",
+                "description": "Timestamp when the data was generated (Cursor Field)"
+            },
+            "file_name": {
+                "type": ["string", "null"],
+                "description": "Name of the CSV file"
+            },
+            "content_type": {
+                "type": ["string", "null"],
+                "description": "Content type of the data"
+            },
+            "api_status": {
+                "type": ["integer", "null"],
+                "description": "HTTP status code from the API"
+            },
             "row_index": {
                 "type": "integer",
                 "description": "Index of the row in the CSV data"
-            },
-            "metadata": {
-                "type": "object",
-                "properties": {
-                    "identifier": {
-                        "type": ["string", "null"],
-                        "description": "Unique identifier from the API response"
-                    },
-                    "file_name": {
-                        "type": ["string", "null"],
-                        "description": "Name of the CSV file"
-                    },
-                    "content_type": {
-                        "type": ["string", "null"],
-                        "description": "Content type of the data"
-                    },
-                    "timestamp": {
-                        "type": ["string", "null"],
-                        "format": "date-time",
-                        "description": "Timestamp when the data was generated"
-                    },
-                    "api_status": {
-                        "type": ["integer", "null"],
-                        "description": "HTTP status code from the API"
-                    }
-                }
-            },
-            "data": {
-                "type": "object",
-                "description": "CSV row data as key-value pairs",
-                "additionalProperties": {
-                    "type": ["string", "null"]
-                }
             }
+        },
+        "additionalProperties": {
+            "type": ["string", "null", "integer", "number", "boolean"],
+            "description": "CSV column data - dynamically added based on CSV structure"
         }
     }
     
@@ -181,8 +184,9 @@ def test_json_schema():
     assert schema["type"] == "object"
     assert "properties" in schema
     assert "row_index" in schema["properties"]
-    assert "metadata" in schema["properties"]
-    assert "data" in schema["properties"]
+    assert "identifier" in schema["properties"]
+    assert "timestamp" in schema["properties"]
+    assert "additionalProperties" in schema  # For dynamic CSV columns
     
     print("✅ JSON schema is valid!")
     return True

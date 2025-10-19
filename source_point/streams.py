@@ -19,11 +19,12 @@ class PointStream(HttpStream):
     Stream implementation for Point API.
     
     This stream fetches data from the Point API, which returns base64-encoded CSV data,
-    and transforms it into structured records.
+    and transforms it into structured records with flattened schema.
     """
 
     url_base = "https://webservices.verzorgdeoverdracht.nl/api/DistributableData/"
-    primary_key = None  # No primary key for this data
+    primary_key = "identifier"  # Use identifier as primary key
+    cursor_field = "timestamp"  # Use timestamp as cursor field
     http_method = "GET"
 
     def __init__(self, config: Mapping[str, Any], **kwargs):
@@ -85,6 +86,36 @@ class PointStream(HttpStream):
         Since the Point API returns all data in a single response,
         there is no pagination, so we always return None.
         """
+        return None
+
+    def request_body_json(
+        self,
+        stream_state: Optional[Mapping[str, Any]] = None,
+        stream_slice: Optional[Mapping[str, Any]] = None,
+        next_page_token: Optional[Mapping[str, Any]] = None,
+    ) -> Optional[Mapping[str, Any]]:
+        """
+        Return the request body for POST requests.
+        Since we use GET requests, this returns None.
+        """
+        return None
+
+    def should_retry(self, response: requests.Response) -> bool:
+        """
+        Override to define custom retry logic.
+        """
+        return response.status_code >= 500 or response.status_code == 429
+
+    def backoff_time(self, response: requests.Response) -> Optional[float]:
+        """
+        Override to define custom backoff time.
+        """
+        if response.status_code == 429:
+            # Rate limited - wait 60 seconds
+            return 60.0
+        elif response.status_code >= 500:
+            # Server error - wait 30 seconds
+            return 30.0
         return None
 
     def parse_response(
@@ -159,12 +190,20 @@ class PointStream(HttpStream):
                     if key and key.strip() and value is not None:
                         cleaned_row[key.strip()] = value.strip() if isinstance(value, str) else value
                 
-                # Create record with CSV data and metadata
+                # Create flattened record with metadata and CSV data at top level
                 record = {
+                    # Metadata fields at top level
+                    "identifier": metadata["identifier"],
+                    "timestamp": metadata["timestamp"],
+                    "file_name": metadata["file_name"],
+                    "content_type": metadata["content_type"],
+                    "api_status": metadata["api_status"],
                     "row_index": row_index,
-                    "metadata": metadata,
-                    "data": cleaned_row
                 }
+                
+                # Add all CSV columns at top level
+                record.update(cleaned_row)
+                
                 yield record
                 
         except Exception as e:
@@ -180,48 +219,40 @@ class PointStream(HttpStream):
             with open(schema_path, "r") as f:
                 return json.load(f)
         except FileNotFoundError:
-            # Fallback schema if file not found
+            # Fallback schema if file not found - flattened structure
             return {
                 "$schema": "http://json-schema.org/draft-07/schema#",
                 "type": "object",
                 "properties": {
+                    "identifier": {
+                        "type": ["string", "null"],
+                        "description": "Unique identifier from the API response (Primary Key)"
+                    },
+                    "timestamp": {
+                        "type": ["string", "null"],
+                        "format": "date-time",
+                        "description": "Timestamp when the data was generated (Cursor Field)"
+                    },
+                    "file_name": {
+                        "type": ["string", "null"],
+                        "description": "Name of the CSV file"
+                    },
+                    "content_type": {
+                        "type": ["string", "null"],
+                        "description": "Content type of the data"
+                    },
+                    "api_status": {
+                        "type": ["integer", "null"],
+                        "description": "HTTP status code from the API"
+                    },
                     "row_index": {
                         "type": "integer",
                         "description": "Index of the row in the CSV data"
-                    },
-                    "metadata": {
-                        "type": "object",
-                        "properties": {
-                            "identifier": {
-                                "type": ["string", "null"],
-                                "description": "Unique identifier from the API response"
-                            },
-                            "file_name": {
-                                "type": ["string", "null"],
-                                "description": "Name of the CSV file"
-                            },
-                            "content_type": {
-                                "type": ["string", "null"],
-                                "description": "Content type of the data"
-                            },
-                            "timestamp": {
-                                "type": ["string", "null"],
-                                "format": "date-time",
-                                "description": "Timestamp when the data was generated"
-                            },
-                            "api_status": {
-                                "type": ["integer", "null"],
-                                "description": "HTTP status code from the API"
-                            }
-                        }
-                    },
-                    "data": {
-                        "type": "object",
-                        "description": "CSV row data as key-value pairs",
-                        "additionalProperties": {
-                            "type": ["string", "null"]
-                        }
                     }
+                },
+                "additionalProperties": {
+                    "type": ["string", "null", "integer", "number", "boolean"],
+                    "description": "CSV column data - dynamically added based on CSV structure"
                 }
             }
 

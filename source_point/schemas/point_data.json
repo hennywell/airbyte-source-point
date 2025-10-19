@@ -3,33 +3,1136 @@
   "type": "object",
   "properties": {
     "identifier": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Unique identifier from the API response (Primary Key)"
     },
     "timestamp": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "format": "date-time",
       "description": "Timestamp when the data was generated (Cursor Field)"
     },
     "file_name": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Name of the CSV file"
     },
     "content_type": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Content type of the data"
     },
     "api_status": {
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "description": "HTTP status code from the API"
     },
     "row_index": {
       "type": "integer",
       "description": "Index of the row in the CSV data"
+    },
+    "TransferID": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "CSV column: TransferID"
+    },
+    "OriginalTransferID": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: OriginalTransferID"
+    },
+    "ScopeType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ScopeType"
+    },
+    "FlowDefinitionName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: FlowDefinitionName"
+    },
+    "ClientBirthYear": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "CSV column: ClientBirthYear"
+    },
+    "ClientHealthCareInsurer": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHealthCareInsurer"
+    },
+    "ClientGender": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientGender"
+    },
+    "ClientPatientNumber": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "CSV column: ClientPatientNumber"
+    },
+    "ClientPostalCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientPostalCode"
+    },
+    "ClientArea": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientArea"
+    },
+    "ClientBSN": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "CSV column: ClientBSN"
+    },
+    "ClientFirstName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientFirstName"
+    },
+    "ClientLastName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientLastName"
+    },
+    "ClientInitials": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientInitials"
+    },
+    "ClientNamePrefix": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientNamePrefix"
+    },
+    "ClientBirthDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientBirthDate"
+    },
+    "ClientDeathDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientDeathDate"
+    },
+    "ClientStreet": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientStreet"
+    },
+    "ClientHouseNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHouseNumber"
+    },
+    "ClientHouseNumberAddition": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHouseNumberAddition"
+    },
+    "ClientCity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCity"
+    },
+    "ClientPhoneNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientPhoneNumber"
+    },
+    "ClientMobileNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientMobileNumber"
+    },
+    "ClientEmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientEmailAddress"
+    },
+    "ClientMaritalStatus": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientMaritalStatus"
+    },
+    "ClientNationality": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientNationality"
+    },
+    "ClientCountryOfBirth": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCountryOfBirth"
+    },
+    "ClientLanguage": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientLanguage"
+    },
+    "ClientReligion": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientReligion"
+    },
+    "ClientLegalRepresentative": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientLegalRepresentative"
+    },
+    "ClientLegalRepresentativeRelation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientLegalRepresentativeRelation"
+    },
+    "ClientContactPerson": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPerson"
+    },
+    "ClientContactPersonRelation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonRelation"
+    },
+    "ClientContactPersonPhoneNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonPhoneNumber"
+    },
+    "ClientContactPersonMobileNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonMobileNumber"
+    },
+    "ClientContactPersonEmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonEmailAddress"
+    },
+    "ClientContactPersonStreet": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonStreet"
+    },
+    "ClientContactPersonHouseNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonHouseNumber"
+    },
+    "ClientContactPersonHouseNumberAddition": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonHouseNumberAddition"
+    },
+    "ClientContactPersonPostalCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonPostalCode"
+    },
+    "ClientContactPersonCity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientContactPersonCity"
+    },
+    "ClientHuisarts": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisarts"
+    },
+    "ClientHuisartsPhoneNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisartsPhoneNumber"
+    },
+    "ClientHuisartsEmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisartsEmailAddress"
+    },
+    "ClientHuisartsStreet": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisartsStreet"
+    },
+    "ClientHuisartsHouseNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisartsHouseNumber"
+    },
+    "ClientHuisartsHouseNumberAddition": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisartsHouseNumberAddition"
+    },
+    "ClientHuisartsPostalCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisartsPostalCode"
+    },
+    "ClientHuisartsCity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientHuisartsCity"
+    },
+    "ClientSpecialist": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialist"
+    },
+    "ClientSpecialistPhoneNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistPhoneNumber"
+    },
+    "ClientSpecialistEmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistEmailAddress"
+    },
+    "ClientSpecialistStreet": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistStreet"
+    },
+    "ClientSpecialistHouseNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistHouseNumber"
+    },
+    "ClientSpecialistHouseNumberAddition": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistHouseNumberAddition"
+    },
+    "ClientSpecialistPostalCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistPostalCode"
+    },
+    "ClientSpecialistCity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistCity"
+    },
+    "ClientSpecialistSpecialism": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientSpecialistSpecialism"
+    },
+    "ClientCaseManager": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManager"
+    },
+    "ClientCaseManagerPhoneNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerPhoneNumber"
+    },
+    "ClientCaseManagerEmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerEmailAddress"
+    },
+    "ClientCaseManagerStreet": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerStreet"
+    },
+    "ClientCaseManagerHouseNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerHouseNumber"
+    },
+    "ClientCaseManagerHouseNumberAddition": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerHouseNumberAddition"
+    },
+    "ClientCaseManagerPostalCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerPostalCode"
+    },
+    "ClientCaseManagerCity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerCity"
+    },
+    "ClientCaseManagerOrganization": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ClientCaseManagerOrganization"
+    },
+    "TransferRequestDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestDate"
+    },
+    "TransferRequestTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestTime"
+    },
+    "TransferRequestUrgency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestUrgency"
+    },
+    "TransferRequestReason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestReason"
+    },
+    "TransferRequestReasonOther": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestReasonOther"
+    },
+    "TransferRequestSpecialWishes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestSpecialWishes"
+    },
+    "TransferRequestMedicalInformation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestMedicalInformation"
+    },
+    "TransferRequestNursingInformation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestNursingInformation"
+    },
+    "TransferRequestSocialInformation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestSocialInformation"
+    },
+    "TransferRequestMentalInformation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestMentalInformation"
+    },
+    "TransferRequestFunctionalInformation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestFunctionalInformation"
+    },
+    "TransferRequestOtherInformation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestOtherInformation"
+    },
+    "TransferRequestContactPerson": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestContactPerson"
+    },
+    "TransferRequestContactPersonPhoneNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestContactPersonPhoneNumber"
+    },
+    "TransferRequestContactPersonEmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestContactPersonEmailAddress"
+    },
+    "TransferRequestContactPersonFunction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestContactPersonFunction"
+    },
+    "TransferRequestStatus": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatus"
+    },
+    "TransferRequestStatusDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusDate"
+    },
+    "TransferRequestStatusTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusTime"
+    },
+    "TransferRequestStatusReason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusReason"
+    },
+    "TransferRequestStatusReasonOther": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusReasonOther"
+    },
+    "TransferRequestStatusContactPerson": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusContactPerson"
+    },
+    "TransferRequestStatusContactPersonPhoneNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusContactPersonPhoneNumber"
+    },
+    "TransferRequestStatusContactPersonEmailAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusContactPersonEmailAddress"
+    },
+    "TransferRequestStatusContactPersonFunction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusContactPersonFunction"
+    },
+    "TransferRequestStatusComment": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestStatusComment"
+    },
+    "TransferRequestCreatedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestCreatedDate"
+    },
+    "TransferRequestCreatedTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestCreatedTime"
+    },
+    "TransferRequestCreatedBy": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestCreatedBy"
+    },
+    "TransferRequestLastModifiedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestLastModifiedDate"
+    },
+    "TransferRequestLastModifiedTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestLastModifiedTime"
+    },
+    "TransferRequestLastModifiedBy": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: TransferRequestLastModifiedBy"
+    },
+    "ReceiveFormStartDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceiveFormStartDate"
+    },
+    "ReceiveFormRealizedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceiveFormRealizedDate"
+    },
+    "DecisionFormStartDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: DecisionFormStartDate"
+    },
+    "DecisionFormRealizedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: DecisionFormRealizedDate"
+    },
+    "AanvullenFirstDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: AanvullenFirstDate"
+    },
+    "AanvullenLastDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: AanvullenLastDate"
+    },
+    "OpstellenVODate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: OpstellenVODate"
+    },
+    "OpstellenVOStatus": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: OpstellenVOStatus"
+    },
+    "GVPDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: GVPDate"
+    },
+    "GVPJaNee": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "CSV column: GVPJaNee"
+    },
+    "MSVTINDDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: MSVTINDDate"
+    },
+    "GRZDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: GRZDate"
+    },
+    "ELVDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ELVDate"
+    },
+    "ZorgAdviesToevoegen": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "CSV column: ZorgAdviesToevoegen"
+    },
+    "DoorlDossierJaNee": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "CSV column: DoorlDossierJaNee"
+    },
+    "RequestInBehandelingStartDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: RequestInBehandelingStartDate"
+    },
+    "RequestInBehandelingRealizeDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: RequestInBehandelingRealizeDate"
+    },
+    "RequestInBehandelingStatus": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: RequestInBehandelingStatus"
+    },
+    "ForwardDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ForwardDate"
+    },
+    "SendingRegionName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: SendingRegionName"
+    },
+    "SendingOrganizationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: SendingOrganizationName"
+    },
+    "SendingLocationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: SendingLocationName"
+    },
+    "SendingDepartmentName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: SendingDepartmentName"
+    },
+    "ReceivingDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingDate"
+    },
+    "ReceivingRegionName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingRegionName"
+    },
+    "ReceivingOrganizationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingOrganizationName"
+    },
+    "ReceivingLocationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingLocationName"
+    },
+    "ReceivingDepartmentName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingDepartmentName"
+    },
+    "ReceivingPostalCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingPostalCode"
+    },
+    "ReceivingArea": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingArea"
+    },
+    "IndiceringCIZOrganizationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: IndiceringCIZOrganizationName"
+    },
+    "IndiceringCIZLocationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: IndiceringCIZLocationName"
+    },
+    "IndiceringCIZDepartmentName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: IndiceringCIZDepartmentName"
+    },
+    "IndiceringGRZOrganizationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: IndiceringGRZOrganizationName"
+    },
+    "IndiceringGRZLocationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: IndiceringGRZLocationName"
+    },
+    "IndiceringGRZDepartmentName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: IndiceringGRZDepartmentName"
+    },
+    "DoorlopendDossierOrganizationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: DoorlopendDossierOrganizationName"
+    },
+    "DoorlopendDossierLocationName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: DoorlopendDossierLocationName"
+    },
+    "DoorlopendDossierDepartmentName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: DoorlopendDossierDepartmentName"
+    },
+    "VertragingToelichting": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: VertragingToelichting"
+    },
+    "RedenVertraging": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: RedenVertraging"
+    },
+    "ZorgInstelling1eVoorkeurTransferpunt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ZorgInstelling1eVoorkeurTransferpunt"
+    },
+    "IngangsdatumIndicatie": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: IngangsdatumIndicatie"
+    },
+    "OntvangerReco": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: OntvangerReco"
+    },
+    "VersturenNaarRecoDatum": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: VersturenNaarRecoDatum"
+    },
+    "ProjectsString": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ProjectsString"
+    },
+    "AttachmentTypeString": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: AttachmentTypeString"
+    },
+    "SendingOrganizationType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: SendingOrganizationType"
+    },
+    "ReceivingOrganizationType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceivingOrganizationType"
+    },
+    "ZZP": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ZZP"
+    },
+    "RedenAfwijzenDoorVVT": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: RedenAfwijzenDoorVVT"
+    },
+    "RedenIntrekken": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: RedenIntrekken"
+    },
+    "RedenOnderbreken": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: RedenOnderbreken"
+    },
+    "SenderInvoiceType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: SenderInvoiceType"
+    },
+    "SenderInvoiceRegion": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: SenderInvoiceRegion"
+    },
+    "ReceiverInvoiceType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceiverInvoiceType"
+    },
+    "ReceiverInvoiceRegion": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "CSV column: ReceiverInvoiceRegion"
     }
-  },
-  "additionalProperties": {
-    "type": ["string", "null", "integer", "number", "boolean"],
-    "description": "CSV column data - dynamically added based on CSV structure"
   }
 }

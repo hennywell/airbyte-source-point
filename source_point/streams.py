@@ -79,7 +79,13 @@ class PointStream(HttpStream):
             # Removed APIkey from query params - using header only for better security
         }
 
-    def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
+    def next_page_token(
+        self,
+        response: requests.Response,
+        stream_state: Optional[Mapping[str, Any]] = None,
+        stream_slice: Optional[Mapping[str, Any]] = None,
+        next_page_token: Optional[Mapping[str, Any]] = None,
+    ) -> Optional[Mapping[str, Any]]:
         """
         Return the next page token for pagination.
         

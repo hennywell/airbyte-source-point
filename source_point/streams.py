@@ -142,9 +142,9 @@ class PointStream(HttpStream):
             
             # Extract metadata from the response (direct structure, no 'body' wrapper)
             metadata = {
-                "metainfo_identifier": json_response.get("Identifier"),
-                "metainfo_file_name": json_response.get("FileName"),
-                "metainfo_timestamp": json_response.get("Timestamp")
+                "_metadata_identifier": json_response.get("Identifier"),
+                "_metadata_file_name": json_response.get("FileName"),
+                "_metadata_timestamp": json_response.get("Timestamp")
             }
             
             # Decode base64 data
@@ -204,9 +204,9 @@ class PointStream(HttpStream):
                 # Create flattened record with metadata and CSV data at top level
                 record = {
                     # Metadata fields at top level
-                    "metainfo_identifier": metadata["metainfo_identifier"],
-                    "metainfo_timestamp": metadata["metainfo_timestamp"],
-                    "metainfo_file_name": metadata["metainfo_file_name"]
+                    "_metadata_identifier": metadata["_metadata_identifier"],
+                    "_metadata_timestamp": metadata["_metadata_timestamp"],
+                    "_metadata_file_name": metadata["_metadata_file_name"]
                 }
                 
                 # Add all CSV columns at top level
@@ -241,16 +241,16 @@ class PointStream(HttpStream):
                 "$schema": "http://json-schema.org/draft-07/schema#",
                 "type": "object",
                 "properties": {
-                    "metainfo_identifier": {
+                    "_metadata_identifier": {
                         "type": ["string", "null"],
-                        "description": "Unique identifier from the API response (Primary Key)"
+                        "description": "Unique identifier from the API response"
                     },
-                    "metainfo_timestamp": {
+                    "_metadata_timestamp": {
                         "type": ["string", "null"],
                         "format": "date-time",
-                        "description": "Timestamp when the data was generated (Cursor Field)"
+                        "description": "Timestamp when the data was generated"
                     },
-                    "metainfo_file_name": {
+                    "_metadata_file_name": {
                         "type": ["string", "null"],
                         "description": "Name of the CSV file"
                     }
@@ -314,16 +314,16 @@ class PointStream(HttpStream):
             # Build schema with discovered columns
             properties = {
                 # Metadata fields
-                "metainfo_identifier": {
+                "_metadata_identifier": {
                     "type": ["string", "null"],
-                    "description": "Unique identifier from the API response (Primary Key)"
+                    "description": "Unique identifier from the API response"
                 },
-                "metainfo_timestamp": {
+                "_metadata_timestamp": {
                     "type": ["string", "null"],
                     "format": "date-time",
-                    "description": "Timestamp when the data was generated (Cursor Field)"
+                    "description": "Timestamp when the data was generated"
                 },
-                "metainfo_file_name": {
+                "_metadata_file_name": {
                     "type": ["string", "null"],
                     "description": "Name of the CSV file"
                 }

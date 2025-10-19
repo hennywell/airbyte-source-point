@@ -66,9 +66,9 @@ def test_data_conversion():
         
         # Create record with metadata
         record = {
-            "metainfo_identifier": f"test_id_{row_index + 1}",
-            "metainfo_timestamp": "2023-01-01T00:00:00Z",
-            "metainfo_file_name": "test_file.csv"
+            "_metadata_identifier": f"test_id_{row_index + 1}",
+            "_metadata_timestamp": "2023-01-01T00:00:00Z",
+            "_metadata_file_name": "test_file.csv"
         }
         record.update(cleaned_row)
         

@@ -67,12 +67,14 @@ class TestPointStream:
         assert "properties" in schema
         
         properties = schema["properties"]
-        assert "row_index" in properties
-        assert "identifier" in properties  # Flattened metadata
-        assert "timestamp" in properties   # Flattened metadata
-        assert "file_name" in properties   # Flattened metadata
-        assert "additionalProperties" in schema  # For dynamic CSV columns
-        # metadata and data should not be nested anymore
+        assert "metainfo_identifier" in properties  # Metadata field
+        assert "metainfo_timestamp" in properties   # Metadata field
+        assert "metainfo_file_name" in properties   # Metadata field
+        assert "TransferID" in properties           # Primary key field
+        assert "TransferCreatedDate" in properties  # Cursor field
+        # Check that primary key is properly defined
+        assert properties["TransferID"]["description"] == "CSV column: TransferID (Primary Key)"
+        assert properties["TransferCreatedDate"]["description"] == "CSV column: TransferCreatedDate (Cursor Field)"
         assert "metadata" not in properties
         assert "data" not in properties
 
@@ -103,17 +105,19 @@ class TestPointStream:
         
         # Check first record - flattened structure
         first_record = records[0]
-        assert first_record["row_index"] == 0
-        assert first_record["identifier"] == "test-id-123"  # Flattened
-        assert first_record["file_name"] == "test.csv"     # Flattened
+        assert first_record["metainfo_identifier"] == "test-id-123"  # Metadata
+        assert first_record["metainfo_file_name"] == "test.csv"     # Metadata
+        assert first_record["metainfo_timestamp"] == "2023-01-01T12:00:00Z"  # Metadata
         assert first_record["column1"] == "value1"         # CSV data flattened
         assert first_record["column2"] == "value2"         # CSV data flattened
         assert first_record["column3"] == "value3"         # CSV data flattened
         
         # Check second record
         second_record = records[1]
-        assert second_record["row_index"] == 1
+        assert second_record["metainfo_identifier"] == "test-id-123"  # Same metadata
         assert second_record["column1"] == "value4"        # CSV data flattened
+        assert second_record["column2"] == "value5"        # CSV data flattened
+        assert second_record["column3"] == "value6"        # CSV data flattened
 
     def test_parse_response_missing_body(self):
         """Test response parsing with missing body."""

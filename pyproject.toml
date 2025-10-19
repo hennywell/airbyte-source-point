@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "source-point"
-version = "0.1.9"
+version = "0.2.0"
 description = "Source implementation for Point API"
 authors = ["Airbyte <contact@airbyte.io>"]
 license = "MIT"

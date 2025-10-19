@@ -23,8 +23,8 @@ class PointStream(HttpStream):
     """
 
     url_base = "https://webservices.verzorgdeoverdracht.nl/api/DistributableData/"
-    primary_key = "metainfo_identifier"  # Use metainfo_identifier as primary key
-    cursor_field = "metainfo_timestamp"  # Use metainfo_timestamp as cursor field
+    primary_key = "TransferID"  # Use TransferID as primary key
+    cursor_field = "TransferCreatedDate"  # Use TransferCreatedDate as cursor field
     http_method = "GET"
 
     def __init__(self, config: Mapping[str, Any], **kwargs):
@@ -198,8 +198,8 @@ class PointStream(HttpStream):
                     if key and key.strip():
                         clean_key = key.strip()
                         cleaned_value = self._convert_field_value(clean_key, value, schema_properties)
-                        if cleaned_value is not None:  # Only include non-null values
-                            cleaned_row[clean_key] = cleaned_value
+                        # Always include the field, even if null, to maintain schema consistency
+                        cleaned_row[clean_key] = cleaned_value
                 
                 # Create flattened record with metadata and CSV data at top level
                 record = {

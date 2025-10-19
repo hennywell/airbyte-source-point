@@ -7,7 +7,7 @@
         "string",
         "null"
       ],
-      "description": "Unique identifier from the API response (Primary Key)"
+      "description": "Unique identifier from the API response"
     },
     "metainfo_timestamp": {
       "type": [
@@ -15,7 +15,7 @@
         "null"
       ],
       "format": "date-time",
-      "description": "Timestamp when the data was generated (Cursor Field)"
+      "description": "Timestamp when the data was generated"
     },
     "metainfo_file_name": {
       "type": [
@@ -29,7 +29,7 @@
         "integer",
         "null"
       ],
-      "description": "CSV column: TransferID"
+      "description": "CSV column: TransferID (Primary Key)"
     },
     "OriginalTransferID": {
       "type": [
@@ -492,6 +492,14 @@
         "null"
       ],
       "description": "CSV column: ClientCaseManagerOrganization"
+    },
+    "TransferCreatedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "CSV column: TransferCreatedDate (Cursor Field)"
     },
     "TransferRequestDate": {
       "type": [
